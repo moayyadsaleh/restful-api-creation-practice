@@ -53,11 +53,25 @@ app.get("/articles", (req, res) => {
 
 
 
-
-
-
-
-
+app.post("/articles", (req, res) => {
+    console.log(req.body.title);
+    console.log(req.body.content);
+    
+    const newArticle = new Article({
+        title: req.body.title,
+        content: req.body.content
+    });
+    
+    newArticle.save()
+        .then(savedArticle => {
+            console.log("Article saved successfully:", savedArticle);
+            res.status(201).send("Article saved successfully");
+        })
+        .catch(err => {
+            console.log("Error saving article:", err);
+            res.status(500).send("Error saving article");
+        });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

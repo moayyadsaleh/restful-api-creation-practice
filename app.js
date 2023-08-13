@@ -73,12 +73,23 @@ app.post("/articles", (req, res) => {
         });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+
+app.delete("/articles", (req, res) => {
+    Article.deleteMany()
+        .then(deletedArticles => {
+            console.log(deletedArticles, "Articles are succefully delted");
+            res.send(deletedArticles);
+        })
+        .catch(err => {
+            console.log("Error deleting articles", err);
+            res.status(500).send("Error deleting articles");
+        });
 });
 
 
-
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 
 

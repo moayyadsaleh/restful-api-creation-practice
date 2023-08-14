@@ -142,6 +142,21 @@ app.route("/articles/:articleTitle")
     });
 })
 
+.delete((req, res) => {
+    Article.deleteOne({ title: req.params.articleTitle })
+        .then(result => {
+            if (result.deletedCount === 0) {
+                res.send("Article not found.");
+            } else {
+                res.send("Article deleted successfully.");
+            }
+        })
+        .catch(err => {
+            console.error("Error deleting article:", err);
+            res.status(500).send("Error deleting article");
+        });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

@@ -104,9 +104,25 @@ app.route("/articles/:articleTitle")
         console.error('Error fetching article:', error);
         res.status(500).send('Error fetching article');
       });
-  });
+  })
 
-
+  .put((req, res) => {
+    Article.updateOne(
+        { title: req.params.articleTitle },
+        { $set: { title: req.body.title, content: req.body.content } }
+    )
+    .then(result => {
+        if (result.n === 0) {
+            res.send("Article not found.");
+        } else {
+            res.send("Article updated successfully.");
+        }
+    })
+    .catch(err => {
+        console.log("Error updating article:", err);
+        res.status(500).send("Error updating article");
+    });
+});
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

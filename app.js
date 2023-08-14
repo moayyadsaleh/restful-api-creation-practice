@@ -39,7 +39,7 @@ const articleSchema = new mongoose.Schema({
 const Article = mongoose.model('Article', articleSchema );
 
 
-
+////////////////////////////Requests Targeting all Articles
 
 app.route("/articles")
     .get((req, res) => {
@@ -82,7 +82,29 @@ app.route("/articles")
                 console.log("Error deleting articles", err);
                 res.status(500).send("Error deleting articles");
             });
-    });
+        });
+
+////////////////////////////Requests Targeting a Specific  Article
+app.route("/articles/:articleTitle")
+
+.get((req, res) => {
+    // Extract the value of :articleTitle from the URL parameter
+    const articleTitle = req.params.articleTitle;
+
+    // Use the extracted articleTitle to find the corresponding article in the database
+    Article.findOne({ title: articleTitle })
+      .then(foundArticle => {
+        if (foundArticle) {
+          res.send(foundArticle);
+        } else {
+          res.status(404).send('Article not found. No article matching the title was found');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching article:', error);
+        res.status(500).send('Error fetching article');
+      });
+  });
 
 
 app.listen(PORT, () => {
